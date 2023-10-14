@@ -19,6 +19,7 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[ORM\Column(type: 'eur')]
     private ?Money $price = null;
 
     public function getId(): ?int
