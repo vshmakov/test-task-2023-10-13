@@ -6,6 +6,7 @@ $finder = (new PhpCsFixer\Finder())
     ->in('config')
     ->in('migrations')
     ->in('src')
+    ->in('tests')
     ->append([
         '.php-cs-fixer.dist.php',
         'web/index.php',
