@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 $finder = (new PhpCsFixer\Finder())
     ->in('config')
+    ->in('migrations')
     ->in('src')
     ->append([
         '.php-cs-fixer.dist.php',
@@ -34,4 +35,5 @@ return (new PhpCsFixer\Config())
         'strict_param' => true,
         'final_class' => true,
     ])
-    ->setFinder($finder);
+    ->setFinder($finder)
+;
