@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Common\State\PersistProcessor;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PurchaseRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,8 +28,8 @@ class Purchase
     #[ORM\Column(length: 20)]
     private ?string $couponCode = null;
 
-    #[ORM\Column(length: 20)]
-    private ?paymentProcessor $paymentProcessor = null;
+    #[ORM\Column(length: 20, enumType: PersistProcessor::class)]
+    private ?PaymentProcessor $paymentProcessor = null;
 
     public function getId(): ?int
     {
@@ -65,12 +66,12 @@ class Purchase
         $this->couponCode = $couponCode;
     }
 
-    public function getPaymentProcessor(): ?paymentProcessor
+    public function getPaymentProcessor(): ?PaymentProcessor
     {
         return $this->paymentProcessor;
     }
 
-    public function setPaymentProcessor(paymentProcessor $paymentProcessor): void
+    public function setPaymentProcessor(PaymentProcessor $paymentProcessor): void
     {
         $this->paymentProcessor = $paymentProcessor;
     }
