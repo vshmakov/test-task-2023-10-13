@@ -9,8 +9,6 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Webmozart\Assert\Assert;
 
-use function Symfony\Component\String\u;
-
 abstract class ActionTest extends WebTestCase
 {
     private KernelBrowser $client;
@@ -19,9 +17,10 @@ abstract class ActionTest extends WebTestCase
     {
         parent::setUp();
 
-
         $this->client = $this->createClient();
-        $this->getEntityManager()->beginTransaction();
+        $entityManager = $this->getEntityManager();
+        $entityManager->getConnection()->setNestTransactionsWithSavepoints(true);
+        $entityManager->beginTransaction();
     }
 
     protected function tearDown(): void
@@ -39,7 +38,7 @@ abstract class ActionTest extends WebTestCase
             $this->getUrl(),
             $this->getQuery(),
             $this->getBody(),
-            $this->getServerFormattedHeaders()
+            $this->getHeaders()
         );
         $this->assertResponseStatusCodeSame($this->getExpectedStatusCode()->value);
         $this->assertResult();
@@ -58,7 +57,10 @@ abstract class ActionTest extends WebTestCase
      */
     protected function getHeaders(): array
     {
-        return [];
+        return [
+            'CONTENT_TYPE' => 'application/json',
+            'ACCEPT' => 'application/json',
+        ];
     }
 
     /**
@@ -89,26 +91,14 @@ abstract class ActionTest extends WebTestCase
     protected function getEntityManager(): EntityManagerInterface
     {
         return $this->getContainer()
-            ->get('doctrine.orm.entity_manager');
+            ->get('doctrine.orm.entity_manager')
+        ;
     }
 
     /**
-     * @return array<string, string>
-     */
-    private function getServerFormattedHeaders(): array
-    {
-        $headers = $this->getHeaders();
-        $headerKeys = array_map(static fn(string $header): string => u($header)->ensureStart('HTTP_')->toString(), array_keys($headers));
-        $headers = array_combine($headerKeys, $headers);
-        Assert::notFalse($headers);
-
-        return $headers;
-    }
-
-    /**
-     * @param array<string, mixed> $query
+     * @param array<string, mixed>      $query
      * @param array<string, mixed>|null $body
-     * @param array<string, string> $headers
+     * @param array<string, string>     $headers
      */
     private function requestApi(HttpMethod $method, string $uri, array $query, ?array $body, array $headers): void
     {
@@ -123,6 +113,29 @@ abstract class ActionTest extends WebTestCase
                 [],
                 $headers,
                 $content
-            );
+            )
+        ;
+        $this->styleJsonResponse();
+    }
+
+    private function styleJsonResponse(): void
+    {
+        $response = $this->client->getResponse();
+        $content = $response->getContent();
+
+        if (false === $content) {
+            return;
+        }
+
+        if ($this->isValidJson($content)) {
+            $response->setContent(json_encode(json_decode($content), \JSON_PRETTY_PRINT));
+        }
+    }
+
+    private function isValidJson(string $json): bool
+    {
+        json_decode($json);
+
+        return !json_last_error();
     }
 }

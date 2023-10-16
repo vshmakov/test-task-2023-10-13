@@ -1,0 +1,8 @@
+App\Entity\Purchase:
+    operations:
+        ApiPlatform\Metadata\Post:
+            uriTemplate: 'purchase'
+        ApiPlatform\Metadata\Get:
+            controller: ApiPlatform\Action\NotFoundAction
+            read: false
+            output: false

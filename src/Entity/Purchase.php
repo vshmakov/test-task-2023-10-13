@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Common\State\PersistProcessor;
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PurchaseRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PurchaseRepository::class)]
-#[ApiResource]
 class Purchase
 {
     #[ORM\Id]
