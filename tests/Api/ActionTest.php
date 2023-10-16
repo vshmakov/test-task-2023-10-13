@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Api;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Webmozart\Assert\Assert;
 
@@ -12,10 +13,14 @@ use function Symfony\Component\String\u;
 
 abstract class ActionTest extends WebTestCase
 {
+    private KernelBrowser $client;
+
     protected function setUp(): void
     {
         parent::setUp();
 
+
+        $this->client = $this->createClient();
         $this->getEntityManager()->beginTransaction();
     }
 
@@ -36,7 +41,7 @@ abstract class ActionTest extends WebTestCase
             $this->getBody(),
             $this->getServerFormattedHeaders()
         );
-        $this->assertResponseStatusCodeSame($this->getExpectedStatusCode());
+        $this->assertResponseStatusCodeSame($this->getExpectedStatusCode()->value);
         $this->assertResult();
     }
 
@@ -84,8 +89,7 @@ abstract class ActionTest extends WebTestCase
     protected function getEntityManager(): EntityManagerInterface
     {
         return $this->getContainer()
-            ->get('doctrine.orm.entity_manager')
-        ;
+            ->get('doctrine.orm.entity_manager');
     }
 
     /**
@@ -94,7 +98,7 @@ abstract class ActionTest extends WebTestCase
     private function getServerFormattedHeaders(): array
     {
         $headers = $this->getHeaders();
-        $headerKeys = array_map(static fn (string $header): string => u($header)->ensureStart('HTTP_')->toString(), array_keys($headers));
+        $headerKeys = array_map(static fn(string $header): string => u($header)->ensureStart('HTTP_')->toString(), array_keys($headers));
         $headers = array_combine($headerKeys, $headers);
         Assert::notFalse($headers);
 
@@ -102,16 +106,16 @@ abstract class ActionTest extends WebTestCase
     }
 
     /**
-     * @param array<string, mixed>      $query
+     * @param array<string, mixed> $query
      * @param array<string, mixed>|null $body
-     * @param array<string, string>     $headers
+     * @param array<string, string> $headers
      */
     private function requestApi(HttpMethod $method, string $uri, array $query, ?array $body, array $headers): void
     {
         $content = null !== $body ? json_encode($body) : null;
         Assert::notFalse($content);
 
-        $this->createClient()
+        $this->client
             ->request(
                 $method->name,
                 $uri,
@@ -119,7 +123,6 @@ abstract class ActionTest extends WebTestCase
                 [],
                 $headers,
                 $content
-            )
-        ;
+            );
     }
 }
