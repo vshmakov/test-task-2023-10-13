@@ -83,8 +83,9 @@ abstract class ActionTest extends WebTestCase
 
     protected function getEntityManager(): EntityManagerInterface
     {
-        return self::getContainer()
-            ->get('doctrine.orm.entity_manager');
+        return $this->getContainer()
+            ->get('doctrine.orm.entity_manager')
+        ;
     }
 
     /**
