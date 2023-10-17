@@ -8,8 +8,10 @@ use Money\Money;
 
 final readonly class Price
 {
-    public function __construct(
-        public Money $price,
-    ) {
+    public float $amount;
+
+    public function __construct(Money $price)
+    {
+        $this->amount = (float) $price->getAmount();
     }
 }

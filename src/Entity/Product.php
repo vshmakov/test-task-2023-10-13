@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Money\Money;
+use Webmozart\Assert\Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -39,6 +40,13 @@ class Product
 
     public function getPrice(): ?Money
     {
+        return $this->price;
+    }
+
+    public function requirePrice(): Money
+    {
+        Assert::notNull($this->price);
+
         return $this->price;
     }
 
