@@ -1,3 +1,5 @@
+/.idea
+/bash
 
 ###> symfony/framework-bundle ###
 /.env.local
@@ -8,8 +10,6 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-
-/.idea
 
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.php

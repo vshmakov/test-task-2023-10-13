@@ -1,6 +1,6 @@
-App\ApiResource\Purchase:
+App\ApiResource\Order:
     operations:
         ApiPlatform\Metadata\Post:
-            uriTemplate: 'purchase'
+            uriTemplate: 'calculate-price'
             status: 200
             write: false

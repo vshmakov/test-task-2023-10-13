@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Api;
 
+use App\Enums\HttpMethod;
+use App\Enums\HttpStatusCode;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -18,16 +20,6 @@ abstract class ActionTest extends WebTestCase
         parent::setUp();
 
         $this->client = $this->createClient();
-        $entityManager = $this->getEntityManager();
-        $entityManager->getConnection()->setNestTransactionsWithSavepoints(true);
-        $entityManager->beginTransaction();
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->getEntityManager()->rollback();
     }
 
     final public function testAction(): void

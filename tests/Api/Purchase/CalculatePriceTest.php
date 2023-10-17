@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Tests\Api\Purchase;
 
 use App\Entity\Product;
+use App\Enums\HttpMethod;
 use App\Tests\Api\ActionTest;
-use App\Tests\Api\HttpMethod;
 use Money\Money;
 
-final class CreateTest extends ActionTest
+final class CalculatePriceTest extends ActionTest
 {
     private Product $product;
 
@@ -26,7 +26,7 @@ final class CreateTest extends ActionTest
 
     protected function getUrl(): string
     {
-        return '/purchase';
+        return '/api/calculate-price';
     }
 
     protected function getMethod(): HttpMethod
@@ -38,6 +38,8 @@ final class CreateTest extends ActionTest
     {
         return [
             'product' => $this->product->getId(),
-        ];
+            'taxNumber' => '123',
+            'couponCode' => '123',
+                    ];
     }
 }

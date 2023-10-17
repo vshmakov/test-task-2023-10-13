@@ -24,13 +24,9 @@ class Product
     #[ORM\Column(type: 'eur')]
     private ?Money $price = null;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Purchase::class, orphanRemoval: true)]
-    private Collection $purchases;
 
-    public function __construct()
-    {
-        $this->purchases = new ArrayCollection();
-    }
+
+
 
     public function getId(): ?int
     {
@@ -55,30 +51,5 @@ class Product
     public function setPrice(Money $price): void
     {
         $this->price = $price;
-    }
-
-    /**
-     * @return Collection<int, Purchase>
-     */
-    public function getPurchases(): Collection
-    {
-        return $this->purchases;
-    }
-
-    public function addPurchase(Purchase $purchase): void
-    {
-        if (!$this->purchases->contains($purchase)) {
-            $this->purchases->add($purchase);
-            $purchase->setProduct($this);
-        }
-    }
-
-    public function removePurchase(Purchase $purchase): void
-    {
-        if ($this->purchases->removeElement($purchase)) {
-            if ($purchase->getProduct() === $this) {
-                $purchase->setProduct(null);
-            }
-        }
     }
 }
