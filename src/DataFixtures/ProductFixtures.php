@@ -5,24 +5,24 @@ declare(strict_types=1);
 namespace App\DataFixtures;
 
 use App\Entity\Product;
+use App\Money\MoneyHelper;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Money\Money;
 
 final class ProductFixtures extends Fixture
 {
     private const  PRODUCTS = [
         [
             'title' => 'Iphone',
-            'price' => 100,
+            'price' => 100.0,
         ],
         [
             'title' => 'Наушники',
-            'price' => 20,
+            'price' => 20.0,
         ],
         [
             'title' => 'Чехол',
-            'price' => 10,
+            'price' => 10.0,
         ],
         ];
 
@@ -31,7 +31,7 @@ final class ProductFixtures extends Fixture
         foreach (self::PRODUCTS as $item) {
             $product = new Product();
             $product->setTitle($item['title']);
-            $product->setPrice(Money::EUR($item['price']));
+            $product->setPrice(MoneyHelper::floatToEur($item['price']));
 
             $manager->persist($product);
         }

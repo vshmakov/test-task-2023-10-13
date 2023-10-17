@@ -9,6 +9,8 @@ use App\DTO\Price;
 use App\Entity\Coupon;
 use App\Entity\Product;
 use App\Enums\CouponType;
+use App\Tax\TaxDefinitionInterface;
+use App\Tax\TaxDefinitionProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Money\Money;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -20,6 +22,7 @@ final readonly class CalculatePriceAction
     public function __construct(
         private \ApiPlatform\Validator\ValidatorInterface $validator,
         private EntityManagerInterface $entityManager,
+        private TaxDefinitionProvider $taxDefinitionProvider,
     ) {
     }
 
@@ -28,10 +31,12 @@ final readonly class CalculatePriceAction
         $this->validator->validate($order);
 
         $product = $this->requireEntity(Product::class, $order->product);
+        $taxDefinition = $this->taxDefinitionProvider->getTaxDefinition($order->taxNumber);
+        Assert::notNull($taxDefinition);
         $coupon = null !== $order->couponCode ? $this->requireEntity(Coupon::class, $order->couponCode) : null;
 
         return new Price(
-            $this->calculatePrice($product, $coupon)
+            $this->calculatePrice($product, $taxDefinition, $coupon)
         );
     }
 
@@ -43,7 +48,7 @@ final readonly class CalculatePriceAction
         return $entity;
     }
 
-    private function calculatePrice(Product $product, ?Coupon $coupon): Money
+    private function calculatePrice(Product $product, TaxDefinitionInterface $taxDefinition, ?Coupon $coupon): Money
     {
         $price = $product->requirePrice();
 
@@ -51,16 +56,28 @@ final readonly class CalculatePriceAction
             $price = $this->applyCoupon($price, $coupon);
         }
 
-        return $price;
+        return $this->addTax($price, $taxDefinition);
     }
 
     private function applyCoupon(Money $price, Coupon $coupon): Money
     {
-        return match ($coupon->getType()) {
-            CouponType::AMOUNT => $price->subtract($coupon->getAmount()),
-            CouponType::PERCENT => $price->multiply(
-                (100.00 - $coupon->getPercent()) / 100
-            ),
+        $discount = match ($coupon->getType()) {
+            CouponType::AMOUNT => $coupon->getAmount(),
+            CouponType::PERCENT => $this->calculatePercent($price, $coupon->getPercent()),
         };
+
+        return $price->subtract($discount);
+    }
+
+    private function calculatePercent(Money $money, float $percent): Money
+    {
+        return $money->multiply($percent / 100);
+    }
+
+    private function addTax(Money $price, TaxDefinitionInterface $taxDefinition): Money
+    {
+        return $price->add(
+            $this->calculatePercent($price, $taxDefinition->getValue())
+        );
     }
 }

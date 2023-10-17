@@ -6,9 +6,9 @@ namespace App\DataFixtures;
 
 use App\Entity\Coupon;
 use App\Enums\CouponType;
+use App\Money\MoneyHelper;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Money\Money;
 
 final class CouponFixtures extends Fixture
 {
@@ -20,7 +20,7 @@ final class CouponFixtures extends Fixture
         $amountCoupon = new Coupon();
         $amountCoupon->setCode(self::AMOUNT_COUPON_CODE);
         $amountCoupon->setType(CouponType::AMOUNT);
-        $amountCoupon->setAmount(Money::EUR(9));
+        $amountCoupon->setAmount(MoneyHelper::floatToEur(9.0));
         $manager->persist($amountCoupon);
 
         $percentCoupon = new Coupon();

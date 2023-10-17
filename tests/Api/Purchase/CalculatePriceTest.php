@@ -7,8 +7,8 @@ namespace App\Tests\Api\Purchase;
 use App\DataFixtures\CouponFixtures;
 use App\Entity\Product;
 use App\Enums\HttpMethod;
+use App\Money\MoneyHelper;
 use App\Tests\Api\ActionTest;
-use Money\Money;
 
 final class CalculatePriceTest extends ActionTest
 {
@@ -18,7 +18,7 @@ final class CalculatePriceTest extends ActionTest
     {
         $this->product = new Product();
         $this->product->setTitle('Test product');
-        $this->product->setPrice(Money::EUR(100));
+        $this->product->setPrice(MoneyHelper::floatToEur(100.0));
 
         $entityManager = $this->getEntityManager();
         $entityManager->persist($this->product);
@@ -39,7 +39,7 @@ final class CalculatePriceTest extends ActionTest
     {
         return [
             'product' => $this->product->getId(),
-            'taxNumber' => '123',
+            'taxNumber' => 'GR123456789',
             'couponCode' => CouponFixtures::PERCENT_COUPON_CODE,
                     ];
     }
@@ -47,6 +47,6 @@ final class CalculatePriceTest extends ActionTest
     protected function assertResult(): void
     {
         $data = $this->getJsonResponseData();
-        $this->assertSame(94, $data['amount']);
+        $this->assertSame(116.56, $data['amount']);
     }
 }

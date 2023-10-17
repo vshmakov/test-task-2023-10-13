@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\DTO;
 
+use App\Money\MoneyHelper;
 use Money\Money;
 
 final readonly class Price
@@ -12,6 +13,6 @@ final readonly class Price
 
     public function __construct(Money $price)
     {
-        $this->amount = (float) $price->getAmount();
+        $this->amount = MoneyHelper::eurToFloat($price);
     }
 }
