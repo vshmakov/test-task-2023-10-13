@@ -8,5 +8,5 @@ final class Order
 {
     public int $product;
     public string $taxNumber;
-    public string $couponCode;
+    public ?string $couponCode = null;
 }
