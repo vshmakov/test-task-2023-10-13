@@ -4,3 +4,5 @@ App\ApiResource\Order:
             uriTemplate: 'calculate-price'
             status: 200
             write: false
+            controller: App\Controller\CalculatePriceAction
+            output: App\DTO\Price

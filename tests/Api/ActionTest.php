@@ -88,6 +88,23 @@ abstract class ActionTest extends WebTestCase
     }
 
     /**
+     * @return mixed[]
+     */
+    protected function getJsonResponseData(): array
+    {
+        $content = $this->client
+            ->getResponse()
+            ->getContent()
+        ;
+        Assert::notFalse($content);
+        $this->assertJson($content);
+        $data = json_decode($content, true);
+        $this->assertIsArray($data);
+
+        return $data;
+    }
+
+    /**
      * @param array<string, mixed>      $query
      * @param array<string, mixed>|null $body
      * @param array<string, string>     $headers

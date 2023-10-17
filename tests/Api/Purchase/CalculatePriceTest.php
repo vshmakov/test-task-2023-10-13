@@ -42,4 +42,10 @@ final class CalculatePriceTest extends ActionTest
             'couponCode' => '123',
                     ];
     }
+
+    protected function assertResult(): void
+    {
+        $data = $this->getJsonResponseData();
+        $this->assertSame('152', $data['price']['amount']);
+    }
 }
