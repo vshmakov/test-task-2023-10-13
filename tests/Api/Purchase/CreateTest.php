@@ -26,7 +26,7 @@ final class CreateTest extends ActionTest
 
     protected function getUrl(): string
     {
-        return '/api/purchase';
+        return '/purchase';
     }
 
     protected function getMethod(): HttpMethod
