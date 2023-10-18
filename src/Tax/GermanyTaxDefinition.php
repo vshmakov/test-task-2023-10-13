@@ -6,7 +6,7 @@ namespace App\Tax;
 
 final class GermanyTaxDefinition implements TaxDefinitionInterface
 {
-    public function getRegularExpression(): string
+    public function getTaxNumberRegularExpression(): string
     {
         return '/^DE\d{9}$/';
     }

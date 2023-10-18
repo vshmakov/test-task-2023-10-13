@@ -19,4 +19,9 @@ abstract class MoneyHelper
     {
         return ((float) $money->getAmount()) / 100;
     }
+
+    public static function calculatePercent(Money $money, float $percent): Money
+    {
+        return $money->multiply($percent / 100);
+    }
 }

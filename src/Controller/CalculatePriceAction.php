@@ -9,6 +9,7 @@ use App\DTO\Price;
 use App\Entity\Coupon;
 use App\Entity\Product;
 use App\Enums\CouponType;
+use App\Money\MoneyHelper;
 use App\Tax\TaxDefinitionInterface;
 use App\Tax\TaxDefinitionProvider;
 use Doctrine\ORM\EntityManagerInterface;
@@ -63,21 +64,16 @@ final readonly class CalculatePriceAction
     {
         $discount = match ($coupon->getType()) {
             CouponType::AMOUNT => $coupon->getAmount(),
-            CouponType::PERCENT => $this->calculatePercent($price, $coupon->getPercent()),
+            CouponType::PERCENT => MoneyHelper::calculatePercent($price, $coupon->getPercent()),
         };
 
         return $price->subtract($discount);
     }
 
-    private function calculatePercent(Money $money, float $percent): Money
-    {
-        return $money->multiply($percent / 100);
-    }
-
     private function addTax(Money $price, TaxDefinitionInterface $taxDefinition): Money
     {
         return $price->add(
-            $this->calculatePercent($price, $taxDefinition->getValue())
+            MoneyHelper::calculatePercent($price, $taxDefinition->getValue())
         );
     }
 }

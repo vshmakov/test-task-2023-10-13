@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag(TaxDefinitionInterface::class)]
 interface TaxDefinitionInterface
 {
-    public function getRegularExpression(): string;
+    public function getTaxNumberRegularExpression(): string;
 
     public function getValue(): float;
 }

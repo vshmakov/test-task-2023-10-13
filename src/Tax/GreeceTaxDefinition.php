@@ -6,7 +6,7 @@ namespace App\Tax;
 
 final class GreeceTaxDefinition implements TaxDefinitionInterface
 {
-    public function getRegularExpression(): string
+    public function getTaxNumberRegularExpression(): string
     {
         return '/^GR\d{9}$/';
     }

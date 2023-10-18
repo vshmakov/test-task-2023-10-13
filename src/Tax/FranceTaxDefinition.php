@@ -6,7 +6,7 @@ namespace App\Tax;
 
 final class FranceTaxDefinition implements TaxDefinitionInterface
 {
-    public function getRegularExpression(): string
+    public function getTaxNumberRegularExpression(): string
     {
         return '/^FR[a-zA-Z]{2}\d{9}$/';
     }

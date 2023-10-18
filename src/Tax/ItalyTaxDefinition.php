@@ -6,7 +6,7 @@ namespace App\Tax;
 
 final class ItalyTaxDefinition implements TaxDefinitionInterface
 {
-    public function getRegularExpression(): string
+    public function getTaxNumberRegularExpression(): string
     {
         return '/^IT\d{11}$/';
     }

@@ -17,7 +17,7 @@ final class TaxDefinitionProvider
     public function getTaxDefinition(string $taxNumber): ?TaxDefinitionInterface
     {
         foreach ($this->definitions as $definition) {
-            if (preg_match($definition->getRegularExpression(), $taxNumber)) {
+            if (preg_match($definition->getTaxNumberRegularExpression(), $taxNumber)) {
                 return $definition;
             }
         }
