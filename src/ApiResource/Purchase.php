@@ -7,10 +7,7 @@ namespace App\ApiResource;
 use App\Entity\Product;
 use App\Enums\PaymentProcessor;
 
-final class Purchase
+final class Purchase extends BaseOrder
 {
-    public ?Product $product = null;
-    public ?string $taxNumber = null;
-    public ?string $couponCode = null;
-    public ?PaymentProcessor $paymentProcessor = null;
+    public PaymentProcessor $paymentProcessor;
 }

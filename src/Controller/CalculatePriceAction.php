@@ -10,6 +10,7 @@ use App\Entity\Coupon;
 use App\Entity\Product;
 use App\Enums\CouponType;
 use App\Money\MoneyHelper;
+use App\Payment\PriceCalculator;
 use App\Tax\TaxDefinitionInterface;
 use App\Tax\TaxDefinitionProvider;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,58 +23,18 @@ final readonly class CalculatePriceAction
 {
     public function __construct(
         private \ApiPlatform\Validator\ValidatorInterface $validator,
-        private EntityManagerInterface $entityManager,
-        private TaxDefinitionProvider $taxDefinitionProvider,
-    ) {
+        private PriceCalculator                           $priceCalculator,
+    )
+    {
     }
 
     public function __invoke(Order $order): Price
     {
         $this->validator->validate($order);
 
-        $product = $this->requireEntity(Product::class, $order->product);
-        $taxDefinition = $this->taxDefinitionProvider->getTaxDefinition($order->taxNumber);
-        Assert::notNull($taxDefinition);
-        $coupon = null !== $order->couponCode ? $this->requireEntity(Coupon::class, $order->couponCode) : null;
 
         return new Price(
-            $this->calculatePrice($product, $taxDefinition, $coupon)
-        );
-    }
-
-    private function requireEntity(string $entityClass, mixed $id): object
-    {
-        $entity = $this->entityManager->find($entityClass, $id);
-        Assert::notNull($entity);
-
-        return $entity;
-    }
-
-    private function calculatePrice(Product $product, TaxDefinitionInterface $taxDefinition, ?Coupon $coupon): Money
-    {
-        $price = $product->requirePrice();
-
-        if (null !== $coupon) {
-            $price = $this->applyCoupon($price, $coupon);
-        }
-
-        return $this->addTax($price, $taxDefinition);
-    }
-
-    private function applyCoupon(Money $price, Coupon $coupon): Money
-    {
-        $discount = match ($coupon->getType()) {
-            CouponType::AMOUNT => $coupon->getAmount(),
-            CouponType::PERCENT => MoneyHelper::calculatePercent($price, $coupon->getPercent()),
-        };
-
-        return $price->subtract($discount);
-    }
-
-    private function addTax(Money $price, TaxDefinitionInterface $taxDefinition): Money
-    {
-        return $price->add(
-            MoneyHelper::calculatePercent($price, $taxDefinition->getValue())
+            $this->priceCalculator->calculate($order)
         );
     }
 }

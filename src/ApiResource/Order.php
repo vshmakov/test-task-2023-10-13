@@ -9,14 +9,6 @@ use App\Entity\Product;
 use App\Validator\EntityId;
 use App\Validator\TaxNumber;
 
-final class Order
+final class Order extends  BaseOrder
 {
-    #[EntityId(entityClass: Product::class)]
-    public int $product;
-
-    #[TaxNumber]
-    public string $taxNumber;
-
-    #[EntityId(entityClass: Coupon::class)]
-    public ?string $couponCode = null;
 }
