@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Payment;
 
 use App\ApiResource\BaseOrder;
-use App\ApiResource\Order;
-use App\DTO\Price;
 use App\Entity\Coupon;
 use App\Entity\Product;
 use App\Enums\CouponType;
@@ -15,7 +13,6 @@ use App\Tax\TaxDefinitionInterface;
 use App\Tax\TaxDefinitionProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Money\Money;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Webmozart\Assert\Assert;
 
 final readonly class PriceCalculator
@@ -23,22 +20,18 @@ final readonly class PriceCalculator
     public function __construct(
         private EntityManagerInterface $entityManager,
         private TaxDefinitionProvider $taxDefinitionProvider,
-    )
-    {
+    ) {
     }
 
     public function calculate(BaseOrder $order): Money
     {
-
         $product = $this->requireEntity(Product::class, $order->product);
         $taxDefinition = $this->taxDefinitionProvider->getTaxDefinition($order->taxNumber);
         Assert::notNull($taxDefinition);
         $coupon = null !== $order->couponCode ? $this->requireEntity(Coupon::class, $order->couponCode) : null;
 
-
-        return  $this->calculatePrice($product, $taxDefinition, $coupon);
+        return $this->calculatePrice($product, $taxDefinition, $coupon);
     }
-
 
     private function requireEntity(string $entityClass, mixed $id): object
     {
@@ -75,5 +68,4 @@ final readonly class PriceCalculator
             MoneyHelper::calculatePercent($price, $taxDefinition->getValue())
         );
     }
-
 }
