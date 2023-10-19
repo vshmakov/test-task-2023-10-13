@@ -16,6 +16,9 @@ final class TaxNumberValidator extends ConstraintValidator
     ) {
     }
 
+    /**
+     * @param string|null $value
+     */
     public function validate($value, Constraint $constraint): void
     {
         Assert::nullOrString($value);

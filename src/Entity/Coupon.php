@@ -8,6 +8,7 @@ use App\Enums\CouponType;
 use App\Repository\CouponRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Money\Money;
+use Webmozart\Assert\Assert;
 
 #[ORM\Entity(repositoryClass: CouponRepository::class)]
 class Coupon
@@ -40,6 +41,13 @@ class Coupon
         return $this->type;
     }
 
+    public function requireType(): CouponType
+    {
+        Assert::notNull($this->type);
+
+        return $this->type;
+    }
+
     public function setType(?CouponType $type): void
     {
         $this->type = $type;
@@ -50,6 +58,13 @@ class Coupon
         return $this->amount;
     }
 
+    public function requireAmount(): Money
+    {
+        Assert::notNull($this->amount);
+
+        return $this->amount;
+    }
+
     public function setAmount(Money $amount): void
     {
         $this->amount = $amount;
@@ -57,6 +72,13 @@ class Coupon
 
     public function getPercent(): ?float
     {
+        return $this->percent;
+    }
+
+    public function requirePercent(): float
+    {
+        Assert::notNull($this->percent);
+
         return $this->percent;
     }
 

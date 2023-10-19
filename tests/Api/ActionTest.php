@@ -82,9 +82,12 @@ abstract class ActionTest extends WebTestCase
 
     protected function getEntityManager(): EntityManagerInterface
     {
-        return $this->getContainer()
+        $entityManager = $this->getContainer()
             ->get('doctrine.orm.entity_manager')
         ;
+        Assert::isInstanceOf($entityManager, EntityManagerInterface::class);
+
+        return $entityManager;
     }
 
     /**
@@ -137,7 +140,9 @@ abstract class ActionTest extends WebTestCase
         }
 
         if ($this->isValidJson($content)) {
-            $response->setContent(json_encode(json_decode($content), \JSON_PRETTY_PRINT));
+            $json = json_encode(json_decode($content), \JSON_PRETTY_PRINT);
+            Assert::notFalse($json);
+            $response->setContent($json);
         }
     }
 

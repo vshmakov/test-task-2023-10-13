@@ -26,6 +26,8 @@ final readonly class PurchaseAction
 
     public function __invoke(Purchase $purchase): Purchase
     {
+        $this->validator->validate($purchase);
+
         $paymentProcessor = $this->paymentProcessorProvider
             ->requirePaymentProcessor($purchase->paymentProcessor)
         ;

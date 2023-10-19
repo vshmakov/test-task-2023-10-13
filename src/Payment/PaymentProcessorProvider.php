@@ -23,6 +23,6 @@ final readonly class PaymentProcessorProvider
             }
         }
 
-        throw new \InvalidArgumentException(sprintf('Payment processor with %s key not found', $key));
+        throw new \InvalidArgumentException(sprintf('Payment processor with %s key not found', $key->value));
     }
 }

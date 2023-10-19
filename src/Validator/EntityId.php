@@ -9,11 +9,12 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
 final class EntityId extends Constraint
 {
+    /** @var class-string */
     public string $entityClass;
 
     public function __construct(mixed $options = null, array $groups = null, mixed $payload = null, string $entityClass = null)
     {
-        if (null !== $entityClass) {
+        if (null !== $entityClass && \is_array($options)) {
             $options['entityClass'] = $entityClass;
         }
 
