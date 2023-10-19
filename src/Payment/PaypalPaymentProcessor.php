@@ -20,6 +20,13 @@ final readonly class PaypalPaymentProcessor implements PaymentProcessorInterface
         return PaymentProcessor::PAYPAL;
     }
 
+    public function supportsPayment(Money $money): bool
+    {
+        $price = (int) $money->getAmount();
+
+        return $price <= 100000;
+    }
+
     public function pay(Money $money): void
     {
         $this->paymentProcessor->pay(

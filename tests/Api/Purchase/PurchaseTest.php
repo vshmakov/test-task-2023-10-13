@@ -42,7 +42,7 @@ final class PurchaseTest extends ActionTest
             'product' => $this->product->getId(),
             'taxNumber' => 'GR123456789',
             'couponCode' => CouponFixtures::AMOUNT_COUPON_CODE,
-            'paymentProcessor' => PaymentProcessor::PAYPAL->value,
+            'paymentProcessor' => PaymentProcessor::STRIPE->value,
         ];
     }
 }

@@ -9,6 +9,7 @@ use App\ApiResource\Purchase;
 use App\Enums\HttpMethod;
 use App\Payment\PaymentProcessorProvider;
 use App\Payment\PriceCalculator;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -25,11 +26,16 @@ final readonly class PurchaseAction
 
     public function __invoke(Purchase $purchase): Purchase
     {
-        $price = $this->priceCalculator->calculate($purchase);
-        $this->paymentProcessorProvider
+        $paymentProcessor = $this->paymentProcessorProvider
             ->requirePaymentProcessor($purchase->paymentProcessor)
-            ->pay($price)
         ;
+        $price = $this->priceCalculator->calculate($purchase);
+
+        if (!$paymentProcessor->supportsPayment($price)) {
+            throw new BadRequestException('Payment is not supported by the payment processor');
+        }
+
+        $paymentProcessor->pay($price);
 
         return $purchase;
     }

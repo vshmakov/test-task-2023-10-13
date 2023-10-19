@@ -4,3 +4,4 @@ App\ApiResource\Purchase:
             uriTemplate: 'purchase'
             status: 200
             write: false
+            controller: App\Controller\PurchaseAction

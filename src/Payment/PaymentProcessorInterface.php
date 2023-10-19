@@ -13,5 +13,7 @@ interface PaymentProcessorInterface
 {
     public function getKey(): PaymentProcessor;
 
+    public function supportsPayment(Money $money): bool;
+
     public function pay(Money $money): void;
 }
