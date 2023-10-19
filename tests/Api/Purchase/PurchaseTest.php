@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Api\Purchase;
 
+use App\DataFixtures\CouponFixtures;
 use App\Entity\Product;
 use App\Enums\HttpMethod;
+use App\Enums\PaymentProcessor;
+use App\Money\MoneyHelper;
 use App\Tests\Api\ActionTest;
-use Money\Money;
 
 final class PurchaseTest extends ActionTest
 {
@@ -17,7 +19,7 @@ final class PurchaseTest extends ActionTest
     {
         $this->product = new Product();
         $this->product->setTitle('Test product');
-        $this->product->setPrice(Money::EUR(123));
+        $this->product->setPrice(MoneyHelper::floatToEur(100.0));
 
         $entityManager = $this->getEntityManager();
         $entityManager->persist($this->product);
@@ -38,9 +40,9 @@ final class PurchaseTest extends ActionTest
     {
         return [
             'product' => $this->product->getId(),
-            'taxNumber' => '123',
-            'couponCode' => '123',
-            'paymentProcessor' => 'paypal',
+            'taxNumber' => 'GR123456789',
+            'couponCode' => CouponFixtures::AMOUNT_COUPON_CODE,
+            'paymentProcessor' => PaymentProcessor::PAYPAL->value,
         ];
     }
 }
