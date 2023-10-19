@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tax;
 
-final class FranceTaxDefinition implements TaxDefinitionInterface
+final readonly class FranceTaxDefinition implements TaxDefinitionInterface
 {
     public function getTaxNumberRegularExpression(): string
     {

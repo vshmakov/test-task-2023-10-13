@@ -6,15 +6,12 @@ namespace App\Controller;
 
 use ApiPlatform\Validator\ValidatorInterface;
 use App\ApiResource\Purchase;
-use App\Enums\HttpMethod;
 use App\Payment\PaymentProcessorProvider;
 use App\Payment\PriceCalculator;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
-#[Route('/purchase', methods: HttpMethod::POST->name)]
 final readonly class PurchaseAction
 {
     public function __construct(

@@ -6,7 +6,7 @@ namespace App\Tax;
 
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-final class TaxDefinitionProvider
+final readonly class TaxDefinitionProvider
 {
     public function __construct(
         /** @var iterable<TaxDefinitionInterface> */
