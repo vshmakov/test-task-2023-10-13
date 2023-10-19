@@ -14,7 +14,11 @@ final class EntityId extends Constraint
 
     public function __construct(mixed $options = null, array $groups = null, mixed $payload = null, string $entityClass = null)
     {
-        if (null !== $entityClass && \is_array($options)) {
+        if (null !== $entityClass) {
+            if (!\is_array($options)) {
+                $options = [];
+            }
+
             $options['entityClass'] = $entityClass;
         }
 

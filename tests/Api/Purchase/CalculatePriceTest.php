@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Tests\Api\Purchase;
 
 use App\DataFixtures\CouponFixtures;
+use App\DataFixtures\ProductFixtures;
 use App\Entity\Product;
 use App\Enums\HttpMethod;
-use App\Money\MoneyHelper;
 use App\Tests\Api\ActionTest;
 
 final class CalculatePriceTest extends ActionTest
@@ -16,13 +16,7 @@ final class CalculatePriceTest extends ActionTest
 
     protected function prepareData(): void
     {
-        $this->product = new Product();
-        $this->product->setTitle('Test product');
-        $this->product->setPrice(MoneyHelper::floatToEur(100.0));
-
-        $entityManager = $this->getEntityManager();
-        $entityManager->persist($this->product);
-        $entityManager->flush();
+        $this->product = $this->requireOneBy(Product::class, ['title' => ProductFixtures::IPHONE_TITLE]);
     }
 
     protected function getUrl(): string

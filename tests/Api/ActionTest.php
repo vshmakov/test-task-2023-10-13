@@ -91,6 +91,25 @@ abstract class ActionTest extends WebTestCase
     }
 
     /**
+     * @template T of object
+     *
+     * @param class-string<T>      $entityClass
+     * @param array<string, mixed> $criteria
+     *
+     * @return T
+     */
+    protected function requireOneBy(string $entityClass, array $criteria): object
+    {
+        $entity = $this->getEntityManager()
+            ->getRepository($entityClass)
+            ->findOneBy($criteria)
+        ;
+        $this->assertNotNull($entity);
+
+        return $entity;
+    }
+
+    /**
      * @return mixed[]
      */
     protected function getJsonResponseData(): array

@@ -11,9 +11,10 @@ use Doctrine\Persistence\ObjectManager;
 
 final class ProductFixtures extends Fixture
 {
+    public const IPHONE_TITLE = 'Iphone';
     private const  PRODUCTS = [
         [
-            'title' => 'Iphone',
+            'title' => self::IPHONE_TITLE,
             'price' => 100.0,
         ],
         [
