@@ -5,3 +5,6 @@ App\ApiResource\Purchase:
             status: 200
             write: false
             controller: App\Controller\PurchaseAction
+            output: App\DTO\EmptyResponse
+            openapi:
+                description: Provides purchase

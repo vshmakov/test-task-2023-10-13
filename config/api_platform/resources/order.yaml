@@ -6,3 +6,5 @@ App\ApiResource\Order:
             write: false
             controller: App\Controller\CalculatePriceAction
             output: App\DTO\Price
+            openapi:
+                description: Calculates price

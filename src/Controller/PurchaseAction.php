@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use ApiPlatform\Validator\ValidatorInterface;
 use App\ApiResource\Purchase;
+use App\DTO\EmptyResponse;
 use App\Payment\PaymentProcessorProvider;
 use App\Payment\PriceCalculator;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -21,7 +22,7 @@ final readonly class PurchaseAction
     ) {
     }
 
-    public function __invoke(Purchase $purchase): Purchase
+    public function __invoke(Purchase $purchase): EmptyResponse
     {
         $this->validator->validate($purchase);
 
@@ -36,6 +37,6 @@ final readonly class PurchaseAction
 
         $paymentProcessor->pay($price);
 
-        return $purchase;
+        return new EmptyResponse();
     }
 }

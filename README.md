@@ -17,3 +17,7 @@ Docker environment is configured with [dunglas/symfony-docker](https://github.co
 1. Use `docker compose exec php sh -c 'bin/phpunit'` to run tests
 2. Use `docker compose exec php sh -c 'vendor/bin/phpstan'` to run static analysis
 3. Run `docker compose exec php sh -c 'vendor/bin/php-cs-fixer fix --allow-risky=yes'` to style code
+
+## Test endpoints
+
+See curl commands at [/docs/curl](https://github.com/vshmakov/test-task-2023-10-13/blob/master/docs/curl)

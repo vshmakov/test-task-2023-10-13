@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+curl \
+    -X POST \
+    https://localhost/api/calculate-price \
+    --insecure \
+    -H 'Content-Type: application/json' \
+    -H 'Accept: application/json' \
+    -d '{"product": 1, "taxNumber": "GR123456789", "couponCode": "D15"}'
